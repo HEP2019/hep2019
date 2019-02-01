@@ -4,10 +4,13 @@
 #include <stdint.h>
 
 int main(int argc, char** argv) {
-  int in = atoi(argv[1]);
+  int in;
   char out[42];
   char* p = out + sizeof out / sizeof(char);
+  *--p = '\0';
 #define PUSH(x) (*--p = '0' + (x))
+
+  scanf("%d", &in);
 
 loop:
   while (in > 9) {
