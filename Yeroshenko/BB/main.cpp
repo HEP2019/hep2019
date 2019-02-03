@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -23,11 +22,10 @@ int main()
         div--;
     }
 
-    sort(list.begin(), list.end(),
-         [](unsigned int a, unsigned int b){return a<b;});
-
     unsigned int answer = 0;
-    for (auto i: list) answer = answer*10 + i;
+    for (unsigned int i = list.size(); i > 0; --i) {
+        answer = answer*10 + list[i-1];
+    }
 
     cout << answer;
     return 0;
