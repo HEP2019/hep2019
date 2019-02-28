@@ -59,7 +59,6 @@ struct element: element_base<Id>, element_union_part<UnionMethod> {
 template <typename Id, typename Traits>
 class forest {
   public:
-
   using value_type = element<Id, Traits::union_>;
 
   private:
@@ -117,46 +116,61 @@ class forest {
     return fsize++;
   }
 
-  size_t find(size_t id) {
-    while (id != fels[id].parent)
-      id = fels[id].parent;
-    return id;
-  }
-
-  // Union by rank.
+  size_t find(size_t id);
   void join(size_t x, size_t y);
 
   template <typename T, typename U>
   friend std::ostream& operator << (std::ostream& , const forest<T, U>&);
   template <typename U>
   friend std::ostream& operator << (std::ostream& , const forest<void, U>&);
+  template <typename A, union_method B, typename C>
+  friend size_t __find(forest<A, C>& f, size_t id);
+  template <typename A, find_method B, typename C>
+  friend void __join(forest<A, C>& f, size_t x, size_t y);
 };
 
+template <typename Id, union_method UnionMethod,
+          typename Traits = forest_traits<find_method::naive, UnionMethod>>
+size_t __find(forest<Id, Traits>& f, size_t id) {
+  while (id != f.fels[id].parent)
+    id = f.fels[id].parent;
+  return id;
+}
+template <typename Id, typename Traits>
+size_t forest<Id, Traits>::find(size_t x) {
+  return __find<Id, Traits::union_>(*this, x);
+}
+
+
 // Union by rank.
-/* XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX */
-void forest<FUCK!!!>::join(size_t x, size_t y) {
-/* XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX */
-  auto x_root = find(x);
-  auto y_root = find(y);
+template <typename Id, find_method FindMethod,
+          typename Traits = forest_traits<FindMethod, union_method::by_rank>>
+void __join(forest<Id, Traits>& f, size_t x, size_t y) {
+  auto x_root = __find<Id, Traits::union_>(f, x);
+  auto y_root = __find<Id, Traits::union_>(f, y);
 
   if (x_root == y_root)
     return;
 
   // if same ranks, then rank of resulting tree will be one larger
-  if (fels[x_root].rank == fels[y_root].rank) {
-    fels[y_root].parent = x_root;
-    fels[x_root].rank ++;
+  if (f.fels[x_root].rank == f.fels[y_root].rank) {
+    f.fels[y_root].parent = x_root;
+    f.fels[x_root].rank ++;
     return;
   }
 
   // if ranks are different, then join tree with smaller rank
   // to the tree with larger rank.
-  if (fels[x_root].rank > fels[y_root].rank)
-    fels[y_root].parent = x_root;
+  if (f.fels[x_root].rank > f.fels[y_root].rank)
+    f.fels[y_root].parent = x_root;
   else
-    fels[x_root].parent = y_root;
+    f.fels[x_root].parent = y_root;
 
   return;
+}
+template <typename Id, typename Traits>
+void forest<Id, Traits>::join(size_t x, size_t y) {
+  __join<Id, Traits::find>(*this, x, y);
 }
 
 template <typename T, typename U>

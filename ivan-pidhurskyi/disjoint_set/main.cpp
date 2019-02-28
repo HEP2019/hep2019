@@ -3,11 +3,13 @@
 
 #include "forest.hpp"
 
+typedef forest_traits<find_method::naive, union_method::by_rank> naive_byrank;
+
 int main() {
   size_t n = 1000;
   size_t n_gr = 10;
 
-  forest<void> forest { n };
+  forest<void, naive_byrank> forest { n };
 
   for (size_t i = 0; i < n; i++)
     forest.make_set();
