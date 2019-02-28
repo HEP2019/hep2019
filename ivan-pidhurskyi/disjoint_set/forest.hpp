@@ -5,38 +5,62 @@
 #include <new>
 #include <ostream>
 
-template <typename Id>
-struct element {
-  size_t parent;
-  size_t rank;
-  size_t size;
-  Id name;
+enum class find_method
+{
+  naive,
+  path_compression,
+  path_halving,
+  path_splitting,
+};
+enum class union_method
+{
+  naive,
+  by_rank,
+  by_size,
+};
+template <find_method  FindMethod,
+          union_method UnionMethod>
+struct forest_traits {
+  static std::integral_constant<find_method, FindMethod> find;
+  static std::integral_constant<union_method, UnionMethod> union_;
+};
 
-  element(size_t id, const Id& name)
+// Basic fields for element with non-void identifier.
+template <typename Id>
+struct element_base {
+  size_t parent;
+  Id name;
+  element_base(size_t id, const Id& name)
   : parent { id },
-    rank { 0 },
-    size { 1 },
     name { name }
   { }
 };
-
+// Specialization for elements without additional identifier.
 template <>
-struct element<void> {
+struct element_base<void> {
   size_t parent;
-  size_t rank;
-  size_t size;
-
-  element(size_t id)
-  : parent { id },
-    rank { 0 },
-    size { 1 }
+  element_base(size_t id)
+  : parent { id }
   { }
 };
 
-template <typename Id>
+// Union by rank or by size needs additional field.
+template <union_method>
+struct element_union_part { union { size_t size; size_t rank = 0; }; };
+// Naive union don't need any additional fields.
+template <>
+struct element_union_part<union_method::naive> { };
+
+template <typename Id, union_method UnionMethod>
+struct element: element_base<Id>, element_union_part<UnionMethod> {
+  using element_base<Id>::element_base;
+};
+
+template <typename Id, typename Traits>
 class forest {
   public:
-  using value_type = element<Id>;
+
+  using value_type = element<Id, Traits::union_>;
 
   private:
   value_type* fels;
@@ -100,36 +124,43 @@ class forest {
   }
 
   // Union by rank.
-  void join(size_t x, size_t y) {
-    auto x_root = find(x);
-    auto y_root = find(y);
+  void join(size_t x, size_t y);
 
-    if (x_root == y_root)
-      return;
+  template <typename T, typename U>
+  friend std::ostream& operator << (std::ostream& , const forest<T, U>&);
+  template <typename U>
+  friend std::ostream& operator << (std::ostream& , const forest<void, U>&);
+};
 
-    // if same ranks, then rank of resulting tree will be one larger
-    if (fels[x_root].rank == fels[y_root].rank) {
-      fels[y_root].parent = x_root;
-      fels[x_root].rank ++;
-      return;
-    }
+// Union by rank.
+/* XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX */
+void forest<FUCK!!!>::join(size_t x, size_t y) {
+/* XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX */
+  auto x_root = find(x);
+  auto y_root = find(y);
 
-    // if ranks are different, then join tree with smaller rank
-    // to the tree with larger rank.
-    if (fels[x_root].rank > fels[y_root].rank)
-      fels[y_root].parent = x_root;
-    else
-      fels[x_root].parent = y_root;
+  if (x_root == y_root)
+    return;
 
+  // if same ranks, then rank of resulting tree will be one larger
+  if (fels[x_root].rank == fels[y_root].rank) {
+    fels[y_root].parent = x_root;
+    fels[x_root].rank ++;
     return;
   }
 
-  template <class T>
-  friend std::ostream& operator << (std::ostream& , const forest<T>&);
-};
+  // if ranks are different, then join tree with smaller rank
+  // to the tree with larger rank.
+  if (fels[x_root].rank > fels[y_root].rank)
+    fels[y_root].parent = x_root;
+  else
+    fels[x_root].parent = y_root;
 
-template <typename T>
-std::ostream& operator << (std::ostream& os, const forest<T>& f) {
+  return;
+}
+
+template <typename T, typename U>
+std::ostream& operator << (std::ostream& os, const forest<T, U>& f) {
   os << "digraph g {" << std::endl;
   //os << "\t graph [rankdir=LR];" << std::endl;
   for (size_t i = 0; i < f.fsize; i++) {
@@ -142,8 +173,8 @@ std::ostream& operator << (std::ostream& os, const forest<T>& f) {
   return os << '}' << std::endl;
 }
 
-template <>
-std::ostream& operator << (std::ostream& os, const forest<void>& f) {
+template <typename T>
+std::ostream& operator << (std::ostream& os, const forest<void, T>& f) {
   os << "digraph g {" << std::endl;
   //os << "\t graph [rankdir=LR];" << std::endl;
   for (size_t i = 0; i < f.fsize; i++) {
