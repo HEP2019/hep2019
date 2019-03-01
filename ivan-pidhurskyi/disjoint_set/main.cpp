@@ -3,11 +3,10 @@
 
 #include "forest.hpp"
 
-typedef forest_traits<find_method::naive, union_method::by_rank> naive_byrank;
+typedef forest_traits<find_method::path_halving, union_method::by_size> naive_byrank;
 
 int main() {
-  size_t n = 1000;
-  size_t n_gr = 10;
+  size_t n = 100;
 
   forest<void, naive_byrank> forest { n };
 
@@ -16,8 +15,7 @@ int main() {
 
   std::random_device rd;
   std::mt19937 gen { rd() };
-  std::uniform_int_distribution<size_t> dis { n_gr + 1, n };
-  std::uniform_int_distribution<size_t> dis_gr { 0, n_gr };
+  std::uniform_int_distribution<size_t> dis { 0, n };
 
   size_t nrnd = n;
   while (nrnd--)
