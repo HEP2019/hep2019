@@ -5,29 +5,31 @@
 #include <new>
 #include <ostream>
 
-enum class find_method
+namespace find_method
 {
-  naive,
-  path_compression,
-  path_halving,
-  path_splitting,
+  struct naive {};
+  struct path_compression {};
+  struct path_halving {};
+  struct path_splitting {};
 };
-enum class union_method
+namespace union_method
 {
-  naive,
-  by_rank,
-  by_size,
+  struct naive {};
+  struct by_rank {};
+  struct by_size {};
 };
-template <find_method  FindMethod,
-          union_method UnionMethod>
-struct forest_traits {
-  static std::integral_constant<find_method, FindMethod> find;
-  static std::integral_constant<union_method, UnionMethod> union_;
+template <typename  FindMethod,
+          typename UnionMethod>
+struct forest_traits
+{
+  typedef FindMethod find_type;
+  typedef UnionMethod union_type;
 };
 
 // Basic fields for element with non-void identifier.
 template <typename Id>
-struct element_base {
+struct element_base
+{
   size_t parent;
   Id name;
   element_base(size_t id, const Id& name)
@@ -37,29 +39,35 @@ struct element_base {
 };
 // Specialization for elements without additional identifier.
 template <>
-struct element_base<void> {
+struct element_base<void>
+{
   size_t parent;
   element_base(size_t id)
   : parent { id }
   { }
 };
 
-// Union by rank or by size needs additional field.
-template <union_method>
-struct element_union_part { union { size_t size; size_t rank = 0; }; };
+template <typename>
+struct element_union_part;
 // Naive union don't need any additional fields.
 template <>
 struct element_union_part<union_method::naive> { };
+// Union by rank or by size needs additional field.
+template <>
+struct element_union_part<union_method::by_rank> { size_t rank = 0; };
+template <>
+struct element_union_part<union_method::by_size> { size_t size = 1; };
 
-template <typename Id, union_method UnionMethod>
+template <typename Id, typename UnionMethod>
 struct element: element_base<Id>, element_union_part<UnionMethod> {
   using element_base<Id>::element_base;
 };
 
 template <typename Id, typename Traits>
-class forest {
+class forest
+{
   public:
-  using value_type = element<Id, Traits::union_>;
+  using value_type = element<Id, typename Traits::union_type>;
 
   private:
   value_type* fels;
@@ -116,6 +124,9 @@ class forest {
     return fsize++;
   }
 
+  size_t parent(size_t id) const { return fels[id].parent; }
+  size_t set_parent(size_t id, size_t p) { return fels[id].parent = p; }
+
   size_t find(size_t id);
   void join(size_t x, size_t y);
 
@@ -123,31 +134,65 @@ class forest {
   friend std::ostream& operator << (std::ostream& , const forest<T, U>&);
   template <typename U>
   friend std::ostream& operator << (std::ostream& , const forest<void, U>&);
-  template <typename A, union_method B, typename C>
-  friend size_t __find(forest<A, C>& f, size_t id);
-  template <typename A, find_method B, typename C>
-  friend void __join(forest<A, C>& f, size_t x, size_t y);
+  template <typename Id_, typename Traits_>
+  friend size_t __find(forest<Id_, Traits_>& f, size_t id, find_method::naive);
+  template <typename Id_, typename Traits_>
+  friend size_t __find(forest<Id_, Traits_>& f, size_t id, find_method::path_compression);
+  template <typename Id_, typename Traits_>
+  friend void __join(forest<Id_, Traits_>& f, size_t x, size_t y, union_method::by_rank);
+  template <typename Id_, typename Traits_>
+  friend void __join(forest<Id_, Traits_>& f, size_t x, size_t y, union_method::by_size);
 };
 
-template <typename Id, union_method UnionMethod,
-          typename Traits = forest_traits<find_method::naive, UnionMethod>>
-size_t __find(forest<Id, Traits>& f, size_t id) {
-  while (id != f.fels[id].parent)
-    id = f.fels[id].parent;
+template <typename Id, typename Traits>
+size_t __find(forest<Id, Traits>& f, size_t id, find_method::naive)
+{
+  while (id != f.parent(id))
+    id = f.parent(id);
   return id;
 }
 template <typename Id, typename Traits>
-size_t forest<Id, Traits>::find(size_t x) {
-  return __find<Id, Traits::union_>(*this, x);
+size_t __find(forest<Id, Traits>& f, size_t id, find_method::path_compression)
+{ return f.set_parent(id, __find(f, id, find_method::naive { })); }
+template <typename Id, typename Traits>
+size_t __find(forest<Id, Traits>& f, size_t id, find_method::path_halving)
+{
+  while (id != f.parent(id)) {
+    f.set_parent(id, f.parent(f.parent(id)));
+    id = f.parent(id);
+  }
+  return id;
 }
+template <typename Id, typename Traits>
+size_t __find(forest<Id, Traits>& f, size_t id, find_method::path_splitting)
+{
+  size_t tmp;
+  while (id != f.parent(id)) {
+    tmp = f.parent(id);
+    f.set_parent(id, f.parent(tmp));
+    id = tmp;
+  }
+  return id;
+}
+template <typename Id, typename Traits>
+size_t forest<Id, Traits>::find(size_t x)
+{ return __find(*this, x, typename Traits::find_type { }); }
 
 
-// Union by rank.
-template <typename Id, find_method FindMethod,
-          typename Traits = forest_traits<FindMethod, union_method::by_rank>>
-void __join(forest<Id, Traits>& f, size_t x, size_t y) {
-  auto x_root = __find<Id, Traits::union_>(f, x);
-  auto y_root = __find<Id, Traits::union_>(f, y);
+template <typename Id, typename Traits>
+void __join(forest<Id, Traits>& f, size_t x, size_t y, union_method::naive)
+{
+  typename Traits::find_type find_method;
+  auto x_root = __find<Id, Traits>(f, x, find_method);
+  auto y_root = __find<Id, Traits>(f, y, find_method);
+  f.fels[y_root].parent = x_root;
+}
+template <typename Id, typename Traits>
+void __join(forest<Id, Traits>& f, size_t x, size_t y, union_method::by_rank)
+{
+  typename Traits::find_type find_method;
+  auto x_root = __find<Id, Traits>(f, x, find_method);
+  auto y_root = __find<Id, Traits>(f, y, find_method);
 
   if (x_root == y_root)
     return;
@@ -169,12 +214,35 @@ void __join(forest<Id, Traits>& f, size_t x, size_t y) {
   return;
 }
 template <typename Id, typename Traits>
-void forest<Id, Traits>::join(size_t x, size_t y) {
-  __join<Id, Traits::find>(*this, x, y);
+void __join(forest<Id, Traits>& f, size_t x, size_t y, union_method::by_size)
+{
+  typename Traits::find_type find_method;
+  auto x_root = __find<Id, Traits>(f, x, find_method);
+  auto y_root = __find<Id, Traits>(f, y, find_method);
+
+  if (x_root == y_root)
+    return;
+
+  // x_root will be the new root, y_root is attached root
+  //
+  // swap roots according to size
+  if (f.fels[x_root].size < f.fels[y_root].size) {
+    size_t tmp = x_root;
+    x_root = y_root;
+    y_root = tmp;
+  }
+
+  // attach tree with smaller size to one with bigger size
+  f.fels[y_root].parent = x_root;
+  f.fels[x_root].size += f.fels[y_root].size;
 }
+template <typename Id, typename Traits>
+void forest<Id, Traits>::join(size_t x, size_t y)
+{ __join(*this, x, y, typename Traits::union_type { }); }
 
 template <typename T, typename U>
-std::ostream& operator << (std::ostream& os, const forest<T, U>& f) {
+std::ostream& operator << (std::ostream& os, const forest<T, U>& f)
+{
   os << "digraph g {" << std::endl;
   //os << "\t graph [rankdir=LR];" << std::endl;
   for (size_t i = 0; i < f.fsize; i++) {
@@ -188,7 +256,8 @@ std::ostream& operator << (std::ostream& os, const forest<T, U>& f) {
 }
 
 template <typename T>
-std::ostream& operator << (std::ostream& os, const forest<void, T>& f) {
+std::ostream& operator << (std::ostream& os, const forest<void, T>& f)
+{
   os << "digraph g {" << std::endl;
   //os << "\t graph [rankdir=LR];" << std::endl;
   for (size_t i = 0; i < f.fsize; i++) {

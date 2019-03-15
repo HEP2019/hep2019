@@ -1,3 +1,5 @@
+CXXFLAGS := -std=c++11
+
 all: code1
 
 run: run-code1
@@ -17,4 +19,4 @@ code1: main.cpp.o
 	$(CXX) $^ -o $@
 
 %.cpp.o: %.cpp forest.hpp
-	$(CXX) -c -o $@ $<
+	$(CXX) -c $(CXXFLAGS) -o $@ $<
