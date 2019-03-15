@@ -4,7 +4,8 @@
 
 int count(long int x1,long int x2,long int y1,long int y2)
 {
-	long int counts = 0;
+// 	long int counts = 0;
+    long int current;
 
     if(x1==x2)
         return abs(y1-y2)-1;
@@ -13,21 +14,37 @@ int count(long int x1,long int x2,long int y1,long int y2)
     
 	if(x1<x2)
 	{
-		for(long int i=1; i<x2-x1; i++){
-			if(i * (y2-y1) % (x2-x1) == 0)
-			counts++;
+        long int d_x = x2-x1;
+        long int d_y = y2-y1;
+    
+		for(long int i=1; i<d_x/2+1; i++){
+			if(i * d_y % d_x == 0)
+            {
+                current = i;
+                break;
+            }
+			//counts++;
             
 		}
 
 	}
 	if(x1>x2)
     {
-        for(long int i=1; i<x1-x2; i++){
-			if(i * (y2-y1) % (x2-x1) == 0)
-			counts++;
+        long int d_x = x2-x1;
+        long int d_y = y2-y1;
+ 
+        for(long int i=1; i<-d_x/2+1; i++){
+			if(i * d_y % d_x == 0)
+            {
+                current = i;
+                break;
+            }
+                //counts++;
     
         }        
     }
+    
+    long int counts = abs(x1-x2)/current-1;
     return counts;
 }
 
