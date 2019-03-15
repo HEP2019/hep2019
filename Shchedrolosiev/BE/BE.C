@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void print_v(std::vector<std::vector<int>> initial){
+void print_v(std::vector<std::vector<int> > initial){
 
 	int width = initial.size(), height = initial[0].size();
 
@@ -17,11 +17,11 @@ void print_v(std::vector<std::vector<int>> initial){
 
 }
 
-std::vector<std::vector<int>> map_picture(std::vector<std::vector<int>> initial){
+std::vector<std::vector<int> > map_picture(std::vector<std::vector<int> > initial){
 	
 	int width = initial.size(),height = initial[0].size();
 
-	std::vector<std::vector<int>> final;
+	std::vector<std::vector<int> > final;
 	final.resize(width-2,std::vector<int>(height-2));
 	
 	for (int col = 0; col < width-2; ++col) {
@@ -36,7 +36,7 @@ std::vector<std::vector<int>> map_picture(std::vector<std::vector<int>> initial)
 	return final;
 }
 
-bool check(std::vector<std::vector<int>> photo)
+bool check(std::vector<std::vector<int> > photo)
 {
 	int width = photo.size(),height = photo[0].size();
 	
@@ -55,7 +55,7 @@ bool check(std::vector<std::vector<int>> photo)
 
 }
 
-int start_cycle(std::vector<std::vector<int>> photo)
+int start_cycle(std::vector<std::vector<int> > photo)
 {
 	int i = 0;
 	while (check(photo))
@@ -72,7 +72,7 @@ int main(int argc, char** argv){
 	int width,height;
 	std::cin>>width>>height;
 
-	std::vector<std::vector<int>> photo;
+	std::vector<std::vector<int> > photo;
 	photo.resize(width,std::vector<int>(height));
     
 //     for(int i=0; i<height; i++){
