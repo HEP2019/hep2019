@@ -13,27 +13,8 @@ void print_v(std::vector<std::vector<int>> initial){
 			std::cout<<initial[j][i]<<" ";
 			}std::cout<<"\n";
 		}
+	std::cout<<"\n";
 
-}
-
-bool search_isolated(std::vector<std::vector<int>> initial){
-    
-    int width = initial.size(),height = initial[0].size();
-    
-
-    for(int i=1; i<height-1; i++){
-        for(int j=1; j<width-1; j++){
-        
-            if(initial[j][i]==1)
-                if(initial[j-1][i]==0)
-                    if(initial[j][i-1]==0)
-                        if(initial[j][i+1]==0)
-                            if(initial[j+1][i]==0)
-                                return 1;
-    }}
-    
-    return 0;
-    
 }
 
 std::vector<std::vector<int>> map_picture(std::vector<std::vector<int>> initial){
@@ -51,10 +32,40 @@ std::vector<std::vector<int>> map_picture(std::vector<std::vector<int>> initial)
 		    			   initial[col+2][row+1]) / 5;
     }}
 
-        print_v(final);
+//         print_v(final);
 	return final;
 }
 
+bool check(std::vector<std::vector<int>> photo)
+{
+	int width = photo.size(),height = photo[0].size();
+	
+	int n = 0;
+
+	for(int i=0; i<height; i++){
+	for(int j=0; j<width; j++){
+		if(photo[j][i] == 1)
+			n++;
+		if(n>=2)
+			return true;
+		}
+	}
+
+	return false;
+
+}
+
+int start_cycle(std::vector<std::vector<int>> photo)
+{
+	int i = 0;
+	while (check(photo))
+	{
+		photo = map_picture(photo);
+	       	i++;	
+	}
+
+	return i;
+}
 
 int main(int argc, char** argv){
 
@@ -77,13 +88,20 @@ int main(int argc, char** argv){
 		std::cin>>fill;
 		if ((int)fill==46)
 			photo[j][i]=0;
-        else
-            photo[j][i]=1;
+        	else
+            		photo[j][i]=1;
 	}}
 
-	std::vector<std::vector<int>> photo2;
-	photo2.resize(width-2,std::vector<int>(height-2));
-	photo2 = map_picture(map_picture(photo));
+	int radius;
+	radius = start_cycle(photo);
+    
+    if(radius==1)
+        std::cout<<0;
+    else
+        std::cout<<radius;
+//	std::vector<std::vector<int>> photo2;
+//	photo2.resize(width-2,std::vector<int>(height-2));
+//	photo2 = map_picture(map_picture(photo));
 	
 
 	return 0;
