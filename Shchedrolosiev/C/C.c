@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <stdlib.h>
 
 int count(long int x1,long int x2,long int y1,long int y2)
 {
