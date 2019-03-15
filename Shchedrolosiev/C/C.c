@@ -5,7 +5,7 @@
 int count(long int x1,long int x2,long int y1,long int y2)
 {
 // 	long int counts = 0;
-    long int current;
+    long int current = 0;
 
     if(x1==x2)
         return abs(y1-y2)-1;
@@ -43,10 +43,15 @@ int count(long int x1,long int x2,long int y1,long int y2)
     
         }        
     }
-    
+    if(current == 0)
+        return 0;
+    else
+    {
     long int counts = abs(x1-x2)/current-1;
     return counts;
-}
+    }
+        
+    }
 
 int main()
 {
