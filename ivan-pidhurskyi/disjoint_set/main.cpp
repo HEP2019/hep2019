@@ -3,12 +3,12 @@
 
 #include "forest.hpp"
 
-typedef forest_traits<find_method::path_halving, union_method::by_size> naive_byrank;
+typedef forest_traits<find_method::path_halving, union_method::by_size> halving_size;
 
 int main() {
   size_t n = 100;
 
-  forest<void, naive_byrank> forest { n };
+  forest<void, halving_size> forest { n };
 
   for (size_t i = 0; i < n; i++)
     forest.make_set();
