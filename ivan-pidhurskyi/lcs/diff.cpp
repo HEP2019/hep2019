@@ -30,12 +30,9 @@ std::ostream& operator << (std::ostream& os, const line& l)
 typedef std::deque<line> lines;
 
 template <>
-class LCS<lines>::concat {
-  lines&& operator () (const line& l, lines& s)
-  {
-    s.push_front(l);
-    return std::move(s);
-  }
+class LCS<lines>::prepend {
+  void operator () (lines& s, const line& l)
+  { s.push_front(l); }
 };
 
 
@@ -56,19 +53,24 @@ int main(int argc, char** argv)
   lines s1, s2;
 
   if (argc != 3) {
-    std::cerr << "use: " << argv[0] << " <file1> <file2>" << std::endl;
+    std::cerr << "use: " << argv[0] << " <old-file> <new-file>" << std::endl;
     return 1;
   }
 
-  // read first file
+  // Read "old" file.
   file.open(argv[1]);
   s1 = read_lines(file);
   file.close();
-  // read second file
+
+  // Read "new" file.
   file.open(argv[2]);
   s2 = read_lines(file);
   file.close();
 
+  // Initialize LCS.
   LCS<lines> lcs { s1, s2 };
+  // Write diff-header.
+  std::cout << "@@ -1," << s1.size()-1 << " +1," << s2.size()-1 << " @@\n";
+  // Compute diff.
   lcs.diff(std::cout);
 }

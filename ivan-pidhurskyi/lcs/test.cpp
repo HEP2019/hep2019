@@ -5,9 +5,9 @@
 #include "LCS.hpp"
 
 template <>
-struct LCS<std::string>::concat {
-  std::string operator () (char c, const std::string& s)
-  { return c + s; }
+struct LCS<std::string>::prepend {
+  void operator () (std::string& s, char c)
+  { s = c + s; }
 };
 
 int main()

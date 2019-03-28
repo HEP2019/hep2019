@@ -15,7 +15,7 @@ class LCS {
   void _diff(std::ostream& os, size_t i, size_t j) const;
 
   public:
-  class concat;
+  class prepend;
   explicit LCS(const T& s1, const T& s2);
   ~LCS();
 
@@ -69,7 +69,7 @@ void LCS<T>::_get(size_t i, size_t j, std::vector<T>& ret, size_t idx) const
          cl = fcs[i-1][j];
 
   if (fs1[i-1] == fs2[j-1]) {
-    ret[idx] = concat()(fs1[i-1], ret[idx]); // append character
+    prepend()(ret[idx], fs1[i-1]); // append character
     _get(i-1, j-1, ret, idx); // continue with prefix
   } else if (cu > cl) {
     _get(i, j-1, ret, idx); // seek up
@@ -96,13 +96,13 @@ void LCS<T>::_diff(std::ostream& os, size_t i, size_t j) const
 {
   if (i > 0 and j > 0 and fs1[i-1] == fs2[j-1]) {
     _diff(os, i-1, j-1);
-    os << "  " << fs1[i-1] << std::endl;
+    os << " " << fs1[i-1] << std::endl;
   } else if (j > 0 and (i == 0 or fcs[i][j-1] >= fcs[i-1][j])) {
     _diff(os, i, j-1);
-    os << "\e[38;5;2m+ " << fs2[j-1] << "\e[0m" << std::endl;
+    os << "+" << fs2[j-1] << std::endl;
   } else if (i > 0 and (j == 0 or fcs[i][j-1] < fcs[i-1][j])) {
     _diff(os, i-1, j);
-    os << "\e[38;5;1m- " << fs1[i-1] << "\e[0m" << std::endl;
+    os << "-" << fs1[i-1] << std::endl;
   }
 }
 
