@@ -142,5 +142,5 @@ int main()
   size_t k;
   std::cin >> s >> k;
   auto sol = algorithm::run(k, s);
-  std::cout << "> solution: " << sol << std::endl;
+  std::cout << sol << std::endl;
 }
