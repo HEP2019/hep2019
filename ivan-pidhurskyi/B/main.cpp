@@ -9,10 +9,10 @@ class algorithm
 {
   typedef std::vector<std::unordered_set<std::string>> cache;
 
-  cache  m_cache; /* cache for DYNAMICPROGRAMMING!! */
-  size_t m_nstp;  /* maximal number of steps        */
-  bool   m_uniq;  /* if all digits are unique       */
-  int    m_solu;  /* solution                       */
+  cache       m_cache; /* cache for DYNAMICPROGRAMMING!! */
+  size_t      m_nstp;  /* maximal number of steps        */
+  bool        m_uniq;  /* if all digits are unique       */
+  std::string m_solu;  /* solution                       */
 
   /*
    * Mark step as completed.
@@ -41,7 +41,7 @@ class algorithm
   /*
    * Entry-point to the algorithm.
    */
-  static int run(size_t nsteps, const std::string& str)
+  static std::string run(size_t nsteps, const std::string& str)
   {
     // check if all digits are unique
     int dc[10];
@@ -66,7 +66,7 @@ algorithm::algorithm(size_t nsteps, bool allunique)
 : m_cache { 1 }, // dummy first element
   m_nstp { nsteps },
   m_uniq { allunique },
-  m_solu { -1 } // all possible inputs will be bigger than -1
+  m_solu { 0x00 } // all possible inputs will be bigger than -1
 { }
 
 void algorithm::mark_step(size_t step, const std::string& str)
@@ -133,7 +133,7 @@ void algorithm::solve(size_t step, std::string& str)
 void algorithm::update_solution(const std::string& sol)
 {
   // final solution is the biggest one form all possible solutions
-  m_solu = std::max(m_solu, std::stoi(sol));
+  m_solu = std::max(m_solu, sol);
 }
 
 int main()
