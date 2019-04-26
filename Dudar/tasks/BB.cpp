@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
+#include <math.h>
 using namespace std;
 
 int main()
 {
-    int n;
+    int n, result_number=0;
     bool was_breaked;
     int test = 0;
     vector<int> result;
@@ -23,7 +24,7 @@ int main()
                 break;
             }
         }
-        if(was_breaked == false)
+        if(!was_breaked)
         {
             cout<<-1<<endl;
             return 1;
@@ -33,11 +34,17 @@ int main()
         if(test>10000) break;
     }
 
-    if(result.empty() == true)
+    if(result.empty())
     {
         cout<<-1;
         return 1;
     }
-    for(int i=result.size()-1; i>=0; i--) cout<<result[i];
+    
+    for(int i=result.size()-1; i>=0; i--)
+    {
+        result_number += result[i]*pow(10, i);
+    }
+    cout<<result_number;
+    
     return 1;
 }
