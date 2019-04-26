@@ -2,13 +2,12 @@
 #include <vector>
 using namespace std;
 
-main()
+int main()
 {
     int n;
     bool was_breaked;
     int test = 0;
     vector<int> result;
-    cout<<"Enter input Number"<<endl;
     cin>>n;
     cout<<endl;
 
