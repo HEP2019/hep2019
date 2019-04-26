@@ -8,14 +8,14 @@ int main()
     int n, result_number=0;
     bool was_breaked;
     int test = 0;
-    vector<int> result;
+    vector <int> result;
     cin>>n;
     cout<<endl;
 
     if(n == 0)
     {
       cout<<0<<endl;
-      return 1;  
+      return 0;  
     } 
 
     while(n!=1)
@@ -34,7 +34,7 @@ int main()
         if(!was_breaked)
         {
             cout<<-1<<endl;
-            return 1;
+            return 0;
         }
 
         test++;
@@ -44,7 +44,7 @@ int main()
     if(result.empty())
     {
         cout<<-1<<endl;
-        return 1;
+        return 0;
     }
     
     for(int i=result.size()-1; i>=0; i--)
@@ -53,5 +53,5 @@ int main()
     }
     cout<<result_number;
     
-    return 1;
+    return 0;
 }
