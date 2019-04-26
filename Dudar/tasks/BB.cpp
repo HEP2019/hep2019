@@ -33,11 +33,11 @@ int main()
         if(test>10000) break;
     }
 
-    if(result.size() == 0)
+    if(result.empty())
     {
         cout<<-1;
         return 1;
     }
-    for(int i=result.size()-1; i>=0; i--) cout<<result.at(i);
+    for(int i=result.size()-1; i>=0; i--) cout<<result[i];
     return 1;
 }
