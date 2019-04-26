@@ -9,7 +9,6 @@ int main()
     int test = 0;
     vector<int> result;
     cin>>n;
-    cout<<endl;
 
     while(n!=1)
     {
@@ -36,11 +35,9 @@ int main()
 
     if(result.size() == 0)
     {
-        cout<<"-1"<<endl;
+        cout<<"-1";
         return 1;
     }
     for(int i=result.size()-1; i>=0; i--) cout<<result.at(i);
-    cout<<endl;
     return 1;
-
 }
