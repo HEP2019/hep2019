@@ -4,7 +4,8 @@
 
 const long int D = 1000000007;
 const long int C = 1009;
-std::vector<long int> C_vector = {1};
+std::vector<long int> C_vector;
+
 
 // Global function to build cofitiens vector
 void fill_C(int K){
@@ -83,6 +84,7 @@ int main()
 	std::cin >> K;
 	std::cin >> H;
 
+	C_vector.push_back(1);
 
 	std::vector<char> result;
 	result = search(N,K,H);
