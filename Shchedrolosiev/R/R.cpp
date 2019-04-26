@@ -67,7 +67,7 @@ std::vector<char> search(int N,int K,int H)
 
 	int index = find_hesh(K,H);
 	if(index==-1){
-		res = {0};
+		res.push_back(0);
 	}
 	else {
 	for(int i=index; i<index+K; ++i){
