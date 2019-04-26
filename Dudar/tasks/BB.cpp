@@ -23,7 +23,7 @@ int main()
                 break;
             }
         }
-        if(!was_breaked)
+        if(was_breaked == false)
         {
             cout<<-1<<endl;
             return 1;
@@ -33,7 +33,7 @@ int main()
         if(test>10000) break;
     }
 
-    if(result.empty())
+    if(result.empty() == true)
     {
         cout<<-1;
         return 1;
