@@ -3,10 +3,11 @@
 #include <bits/stdc++.h>
 
 int D = 1000000007;
-std::vector<long int> C_v = {1};
+std::vector<long int> C_v;
 
 int hesh(std::vector<char> v)
 {
+	C_v.push_back(1);
 	long int sum = 0;
 	long int C;
 	for(char Ci : v){
