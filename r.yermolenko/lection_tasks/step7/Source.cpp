@@ -12,6 +12,6 @@ int main()
 	std::cout << "Family: " << e.getFamily() << std::endl;
 	std::cout << "Spin: " << e.getSpin() << std::endl;
 	std::cout << "ElectricCharge: " << e.getElectricCharge() << std::endl;
-	e.~Electron();
+	//e.~Electron();
 	return 0;
 }

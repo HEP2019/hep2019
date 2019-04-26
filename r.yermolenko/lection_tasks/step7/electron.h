@@ -14,7 +14,9 @@ public:
 	    {
        	 this->m_name = "electron";
 		}
-	~Electron() {}
+	~Electron() {
+		m_spin = 0;
+	}
 	T getSpin() { return m_spin; }
 	T getElectricCharge() { return m_electric_charge; }
 	std::string getFamily() { return m_family; }
