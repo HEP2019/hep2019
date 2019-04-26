@@ -5,7 +5,6 @@ using namespace std;
 int main()
 {
    int long N,Q = 0;
-   cout << "Please enter a number"<<endl;
    cin >> N;
    if(N==0)
     {
