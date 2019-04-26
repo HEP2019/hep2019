@@ -11,6 +11,12 @@ int main()
     vector<int> result;
     cin>>n;
 
+    if(n == 0)
+    {
+      cout<<0;
+      return 1;  
+    } 
+
     while(n!=1)
     {
         was_breaked=false;
