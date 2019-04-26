@@ -88,8 +88,8 @@ int main()
 
 	std::vector<char> result;
 	result = search(N,K,H);
-	for(char a : result){
-		std::cout << a;
+	for(int i=0; i<result.size(); ++i){
+		std::cout << result[i];
 	}
 
 	return 0;
