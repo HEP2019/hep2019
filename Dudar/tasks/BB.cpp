@@ -25,7 +25,7 @@ int main()
         }
         if(!was_breaked)
         {
-            cout<<"-1"<<endl;
+            cout<<-1<<endl;
             return 1;
         }
 
@@ -35,7 +35,7 @@ int main()
 
     if(result.size() == 0)
     {
-        cout<<"-1";
+        cout<<-1;
         return 1;
     }
     for(int i=result.size()-1; i>=0; i--) cout<<result.at(i);
