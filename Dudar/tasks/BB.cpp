@@ -10,10 +10,11 @@ int main()
     int test = 0;
     vector<int> result;
     cin>>n;
+    cout<<endl;
 
     if(n == 0)
     {
-      cout<<0;
+      cout<<0<<endl;
       return 1;  
     } 
 
@@ -42,7 +43,7 @@ int main()
 
     if(result.empty())
     {
-        cout<<-1;
+        cout<<-1<<endl;
         return 1;
     }
     
