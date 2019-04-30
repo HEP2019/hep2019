@@ -5,53 +5,29 @@ using namespace std;
 
 int main()
 {
-    int n, result_number=0;
-    bool was_breaked;
-    int test = 0;
-    vector <int> result;
+    int n;
     cin>>n;
-    cout<<endl;
 
-    if(n == 0)
-    {
-      cout<<0<<endl;
-      return 0;  
-    } 
+    vector <int> result;
 
-    while(n!=1)
-    {
-        was_breaked=false;
-        for(int i=9; i>1; i--)
-        {
-            if(n%i == 0)
-            {
-                result.push_back(i);
-                n /= i;
-                was_breaked=true;
-                break;
-            }
-        }
-        if(!was_breaked)
-        {
-            cout<<-1<<endl;
-            return 0;
-        }
-
-        test++;
-        if(test>10000) break;
-    }
-
-    if(result.empty())
-    {
-        cout<<-1<<endl;
+    if(n == 0 || n == 1){
+        cout<<n<<endl;
         return 0;
     }
-    
-    for(int i=result.size()-1; i>=0; i--)
-    {
-        result_number += result[i]*pow(10, i);
+
+    for(int i=9; i > 1; i--){
+        while(n%i==0){
+            result.push_back(i);
+            n/=i;
+        }
     }
-    cout<<result_number;
-    
+
+    if(n>9){
+        cout<<-1;
+        return 0;
+    }
+
+    for(int i=result.size()-1; i>=0; i--) cout<<result[i];
+    cout<<endl;
     return 0;
 }
