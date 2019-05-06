@@ -10,10 +10,16 @@ int main()
 
     vector <int> result;
 
-    if(n == 0 || n == 1){
-        cout<<n<<endl;
+    if(n == 0){
+        cout<<10<<endl;
         return 0;
     }
+
+    if(n == 1){
+        cout<<1<<endl;
+        return 0;
+    }
+
 
     for(int i=9; i > 1; i--){
         while(n%i==0){
@@ -21,7 +27,6 @@ int main()
             n/=i;
         }
     }
-
     if(n>9){
         cout<<-1;
         return 0;
