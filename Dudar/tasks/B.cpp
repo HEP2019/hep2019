@@ -67,7 +67,7 @@ int main()
         //     if(has_n_same_digits == 2 && K == 2){
         //         if(N_arr[counter] > N_arr[counter+1]){
         //             swap(N_arr[counter], N_arr[max_el_idx]);
-                    
+
         //         }
         //     }
         //     //think where to put the rightest max digit.
@@ -90,19 +90,3 @@ int main()
     return 0;
 }
 /*Одинаковые цифры можно переставлять местами.*/
-
-//if 1
-321999
-921993
-
-//if 2
-321999
-921993
-991932
-
-//if 3
-321999
-921993
-991923
-999123
-999321
