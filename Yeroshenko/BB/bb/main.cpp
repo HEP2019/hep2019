@@ -10,7 +10,7 @@ int main()
 
     cin>>N;
 
-    int *container = new int[N];
+    int container[NNUM];
     int count = 0;
 
     while (N>1) {
@@ -27,11 +27,9 @@ int main()
     }
 
     long long answer = 0;
-    for (unsigned int i = count; i > 0; --i) {
+    for (int i = count; i > 0; --i) {
         answer = answer*10 + container[i-1];
     }
-
-    delete[] container;
 
     cout << answer;
     return 0;
