@@ -6,6 +6,11 @@ int main(){
     cin>>N;
 
     int d[N+1][N+1];
+
+    for(int i=0;i<N+1; i++){
+        for(int j=0;j<N+1; j++) d[i][j]=0;
+    }
+
     d[1][1] = 1;
     d[2][2] = 1;
 
