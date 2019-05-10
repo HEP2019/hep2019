@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 long long int euc(long long int a,long long int b) 
 { 
