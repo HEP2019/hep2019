@@ -3,8 +3,9 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+typedef std::vector<std::vector<int> > matr;
 
-void print_v(std::vector<std::vector<int> > initial){
+void print_v(matr initial){
 
 	int width = initial.size(), height = initial[0].size();
 
@@ -17,11 +18,11 @@ void print_v(std::vector<std::vector<int> > initial){
 
 }
 
-std::vector<std::vector<int> > map_picture(std::vector<std::vector<int> > initial){
+matr map_picture(matr initial){
 	
 	int width = initial.size(),height = initial[0].size();
 
-	std::vector<std::vector<int> > final;
+	matr final;
 	final.resize(width-2,std::vector<int>(height-2));
 	
 	for (int col = 0; col < width-2; ++col) {
@@ -32,39 +33,53 @@ std::vector<std::vector<int> > map_picture(std::vector<std::vector<int> > initia
 		    			   initial[col+2][row+1]) / 5;
     }}
 
-//         print_v(final);
 	return final;
 }
 
-bool check(std::vector<std::vector<int> > photo)
-{
-	int width = photo.size(),height = photo[0].size();
-	
-	int n = 0;
 
-	for(int i=0; i<height; i++){
-	for(int j=0; j<width; j++){
-		if(photo[j][i] == 1)
-			n++;
-		if(n>=2)
-			return true;
+int start_search(matr photo)
+{
+	photo = map_picture(photo);
+
+	int width = photo.size(), height = photo[0].size();
+
+	int radius = 0;
+
+	for (int i = 0; i < height; ++i)
+	{
+	for (int j = 0; j < width; ++j)
+	{
+		if(photo[j][i]==1){
+
+			int mark_1 = j;
+			int mark_2 = j;
+			radius = 1;
+
+			while(photo[mark_2][i]==1) mark_2++;
+
+			int center;
+			center = (mark_1 + mark_2) / 2;		
+
+			int i_ = i;
+			// while(photo[center][i_]==1){
+			// 	i_++;
+			// 	radius++;
+			// }
+
+			do {
+			radius++;
+			i_++;
+			}
+			while(photo[center][i_]==1);
+
+			//breake
+			i=height;
+			j=width;
 		}
 	}
-
-	return false;
-
-}
-
-int start_cycle(std::vector<std::vector<int> > photo)
-{
-	int i = 0;
-	while (check(photo))
-	{
-		photo = map_picture(photo);
-	       	i++;	
 	}
 
-	return i;
+	return radius / 2;
 }
 
 int main(int argc, char** argv){
@@ -72,15 +87,9 @@ int main(int argc, char** argv){
 	int width,height;
 	std::cin>>width>>height;
 
-	std::vector<std::vector<int> > photo;
+	matr photo;
 	photo.resize(width,std::vector<int>(height));
     
-//     for(int i=0; i<height; i++){
-// 		for(int j=0; j<width; j++){
-// 
-// 		std::cin>>photo[j][i];
-// 
-// 	}}
 
 	for(int i=0; i<height; i++){
 		for(int j=0; j<width; j++){
@@ -88,17 +97,20 @@ int main(int argc, char** argv){
 		std::cin>>fill;
 		if ((int)fill==46)
 			photo[j][i]=0;
-        	else
-            		photo[j][i]=1;
+    	else
+        		photo[j][i]=1;
 	}}
 
+
 	int radius;
-	radius = start_cycle(photo);
-    
-    if(radius==1)
-        std::cout<<0;
-    else
-        std::cout<<radius;
+	radius = start_search(photo);
+
+	std::cout<<radius;    
+    // if(radius==1)
+    //     std::cout<<0;
+    // else
+    //     std::cout<<radius;
+
 //	std::vector<std::vector<int>> photo2;
 //	photo2.resize(width-2,std::vector<int>(height-2));
 //	photo2 = map_picture(map_picture(photo));

@@ -26,3 +26,16 @@ class fifo
     back = tempNode;
   }
 };
+
+int main()
+{
+    fifo<int> queue;
+    queue.enqueue(1);
+    queue.enqueue(2);
+    queue.enqueue(3);
+
+    cout << queue.dequeue() << ", \n";
+    cout << queue.dequeue() << ", \n";
+    cout << queue.dequeue() << ", \n";
+    return 0;
+}

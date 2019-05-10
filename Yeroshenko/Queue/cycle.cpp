@@ -6,19 +6,20 @@ using namespace std;
 template<typename T>
 class Queue
 {
-private:
-    T *queuePtr;     // указатель на очередь
-    const int size;  // максимальное количество элементов в очереди
-    int begin,       // начало очереди
-        end;         // конец очереди
-    int elemCT;      // счетчик элементов
-public:
-    Queue(int =10);             // конструктор по умолчанию
-    ~Queue();                   // деструктор
+    private:
+        T *queuePtr;     // указатель на очередь
+        const int size;  // максимальное количество элементов в очереди
+        int begin,       // начало очереди
+            end;         // конец очереди
+        int elemCT;      // счетчик элементов
+    public:
+        Queue(int =10);             // конструктор по умолчанию
+        ~Queue();                   // деструктор
 
-    void enqueue(const T &);    // добавить элемент в очередь
-    T dequeue();                // удалить элемент из очереди
-    void printQueue();
+        void enqueue(const T &);    // добавить элемент в очередь
+        T dequeue();                // удалить элемент из очереди
+        void printQueue();
+        bool isEmpty();
 };
 
 // реализация методов шаблона класса Queue
@@ -96,3 +97,23 @@ void Queue<T>::printQueue()
     }
 }
 
+template<typename T>
+bool Queue<T>::isEmpty()
+{
+    if (elemCT == 0) return true;
+    else return false;
+}
+
+int main()
+{
+    Queue<int> queue;
+    queue.enqueue(1);
+    queue.enqueue(2);
+    queue.enqueue(3);
+
+    while(!queue.isEmpty())
+        cout << queue.dequeue() << "\n";
+    queue.printQueue();
+
+    return 0;
+}

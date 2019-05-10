@@ -1,14 +1,17 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
+
+#define NNUM 35
 
 int main()
 {
     unsigned int N, div = 9;
-    vector<unsigned int> list(0);
 
     cin>>N;
+
+    int *container = new int[N];
+    int count = 0;
 
     while (N>1) {
         if (div < 2){
@@ -16,16 +19,19 @@ int main()
             return 0;
         }
         while (N%div == 0) {
-            list.push_back(div);
+            container[count] = div;
+            ++ count;
             N /= div;
         }
         div--;
     }
 
-    unsigned int answer = 0;
-    for (unsigned int i = list.size(); i > 0; --i) {
-        answer = answer*10 + list[i-1];
+    long long answer = 0;
+    for (unsigned int i = count; i > 0; --i) {
+        answer = answer*10 + container[i-1];
     }
+
+    delete[] container;
 
     cout << answer;
     return 0;
