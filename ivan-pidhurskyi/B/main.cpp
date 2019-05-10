@@ -44,7 +44,7 @@ class algorithm
   static std::string run(size_t nsteps, const std::string& str)
   {
     // check if all digits are unique
-    int dc[10];
+    int dc[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     bool uniq = true;
     for (auto c:str) {
       int idx = c - '0';
@@ -66,7 +66,7 @@ algorithm::algorithm(size_t nsteps, bool allunique)
 : m_cache { 1 }, // dummy first element
   m_nstp { nsteps },
   m_uniq { allunique },
-  m_solu { 0x00 } // all possible inputs will be bigger than -1
+  m_solu { } // all possible inputs will be bigger than -1
 { }
 
 void algorithm::mark_step(size_t step, const std::string& str)
