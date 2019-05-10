@@ -9,6 +9,19 @@ long long int euc(long long int a,long long int b)
     return euc(b % a, a); 
 }
 
+int myAtoi(const char* str) 
+{ 
+    int res = 0; // Initialize result 
+  
+    // Iterate through all characters of input string and 
+    // update result 
+    for (int i = 0; str[i] != '\0'; ++i) 
+        res = res * 10 + str[i] - '0'; 
+  
+    // return result. 
+    return res; 
+} 
+
 int parse_n_calc(std::string str)
 {
 	long long int arr[4];
@@ -22,7 +35,7 @@ int parse_n_calc(std::string str)
 		}
 		else
 		{
-			long long int str_value = std::stoi(temp);
+			long long int str_value = myAtoi(temp.c_str());
 			if(ind>3) break;
 			arr[ind]=str_value;
 			ind++;
