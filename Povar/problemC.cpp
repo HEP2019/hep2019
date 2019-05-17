@@ -8,22 +8,16 @@ int main()
     cin >> x1 >> y1 >> x2 >> y2;
     dx=x1-x2;
     dy=y1-y2;
+    dmin=0;
     if (dx<0) dx*=-1;
     if (dy<0) dy*=-1;
-    dmin=dx;
-    if (dx < dy)
+    while(dx && dy)
     {
-        dmin=dy;
-        dy=dx;
-        dx=dmin;
+        dmin=dx%dy;
+        dx=dy;
+        dy=dmin;
     }
-    for (long int i=dy; i>0;i--) {
-        if( (dx%i == 0) && (dy%i==0)){
-            dmin=i;
-            break;
-        }
-    }
+    dmin = dx | dy;
     cout << dmin - 1;
-    return 0;
     
 }
