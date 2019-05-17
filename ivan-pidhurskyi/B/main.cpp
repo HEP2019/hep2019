@@ -1,13 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <unordered_set>
+#include <set>
 #include <cassert>
 #include <algorithm>
 
 class algorithm
 {
-  typedef std::vector<std::unordered_set<std::string>> cache;
+  typedef std::set<std::string> set;
+  typedef std::vector< std::set<std::string> > cache;
 
   cache       m_cache; /* cache for DYNAMICPROGRAMMING!! */
   size_t      m_nstp;  /* maximal number of steps        */
@@ -46,16 +47,16 @@ class algorithm
     // check if all digits are unique
     int dc[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     bool uniq = true;
-    for (auto c:str) {
-      int idx = c - '0';
+    for (int i = 0; i < str.size(); ++i) {
+      int idx = str[i] - '0';
       if (dc[idx]++) {
         uniq = false;
         break;
       }
     }
 
-    algorithm algo { nsteps, uniq }; // create environment
-    auto buf = str; // copy initial string (`solve()` will mutate its argument)
+    algorithm algo (nsteps, uniq); // create environment
+    std::string buf = str; // copy initial string (`solve()` will mutate its argument)
     algo.solve(0, buf); // run algorithm
 
     return algo.m_solu;
@@ -63,17 +64,16 @@ class algorithm
 };
 
 algorithm::algorithm(size_t nsteps, bool allunique)
-: m_cache { 1 }, // dummy first element
-  m_nstp { nsteps },
-  m_uniq { allunique },
-  m_solu { } // all possible inputs will be bigger than -1
+: m_cache (1), // dummy first element
+  m_nstp (nsteps),
+  m_uniq (allunique)
 { }
 
 void algorithm::mark_step(size_t step, const std::string& str)
 {
   // expand vector for one more element
   if (step >= m_cache.size())
-    m_cache.emplace_back();
+    m_cache.push_back(std::set<std::string>());
   // save the step
   m_cache[step].insert(str);
 }
@@ -84,7 +84,7 @@ bool algorithm::is_old_step(size_t step, const std::string& str) const
   if (step >= m_cache.size())
     return false;
   // check if the same step is present
-  auto sol = m_cache[step].find(str);
+  set::const_iterator sol = m_cache[step].find(str);
   return sol != m_cache[step].end();
 }
 
@@ -103,8 +103,8 @@ void algorithm::solve(size_t step, std::string& str)
 
   // perform all possible digit-swaps and repeat the algorithm for each of them
   bool branched = false; // true if any digit-swap succeed 
-  for (auto i = 0; i < str.size(); ++i) {
-    for (auto j = i + 1; j < str.size(); ++j) {
+  for (int i = 0; i < str.size(); ++i) {
+    for (int j = i + 1; j < str.size(); ++j) {
       if (str[i] < str[j]) { // swap ONLY if will move bigger digit to the "left"
         std::swap(str[i], str[j]); // "digit-swap"
         solve(step + 1, str);
@@ -120,7 +120,7 @@ void algorithm::solve(size_t step, std::string& str)
     // digits swapped.
     // Otherwise, current string is the solution.
     if (m_uniq && ((m_nstp - step) & 0x01)) {
-      auto len = str.size();
+      int len = str.size();
       std::swap(str[len-2], str[len-1]);
       update_solution(str);
       std::swap(str[len-2], str[len-1]);
@@ -141,6 +141,6 @@ int main()
   std::string s;
   size_t k;
   std::cin >> s >> k;
-  auto sol = algorithm::run(k, s);
+  std::string sol = algorithm::run(k, s);
   std::cout << sol << std::endl;
 }
