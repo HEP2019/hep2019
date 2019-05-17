@@ -68,12 +68,11 @@ int main(){
     for(int i = 0; i< light_pixels.size(); i++){
         for(int p = 0; p < i; p++){
             if(light_pixels[p].r_moon>light_pixels[i].r_max_possible) max_exceeded = true;
-            if(light_pixels[p].r_moon>light_pixels[i])
         }
         if(max_exceeded) break;
         R = 999;
         for(int j = 0; j< dark_pixels.size(); j++){
-            R = min(R, light_pixels[i].distance_to(dark_pixels[j]));
+            if() R = min(R, light_pixels[i].distance_to(dark_pixels[j]));
         }
         light_pixels[i].r_moon = min(R, light_pixels[i].r_max_possible);
     }
