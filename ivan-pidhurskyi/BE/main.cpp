@@ -167,10 +167,11 @@ l_black:
  */
 std::istream& operator >> (std::istream& is, field& f)
 {
+  std::string s;
   for (size_t y = 0; y < f.m_height; ++y) {
+    is >> s;
     for (size_t x = 0; x < f.m_width; ++x)
-      f.m_cells[x][y] = (is.get() == '.') ? -1 : 0;
-    is.get();
+      f.m_cells[x][y] = (s[x] == '.') ? -1 : 0;
   }
   return is;
 }
@@ -209,8 +210,6 @@ int main(int argc, char** argv)
   std::cin >> width >> height;
 
   field f (width, height);
-
-  std::cin.get(); // skip line-break
   std::cin >> f;
 
   // print input
