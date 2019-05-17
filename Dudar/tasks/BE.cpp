@@ -8,66 +8,80 @@
 
 #include <iostream>
 #include <cmath>
+#include <algorithm>
+#include <vector>
 using namespace std;
+
+class Pixel{
+    public:
+        int x, y, color, r_max_possible, r_moon;
+
+    Pixel(int x0, int y0, int col){
+        x = x0;
+        y = y0;
+        color = col;
+        r_moon = 0;
+    }
+    
+    bool operator > (const Pixel& pix) const{
+        return (r_max_possible > pix.r_max_possible);
+    }
+
+    int distance_to(Pixel& pix){
+        return sqrt((x-pix.x)*(x-pix.x)+(y-pix.y)*(y-pix.y));
+    }
+
+};
 
 int main(){
     int width, height;
     cin>>width>>height; //([1, 200] both)
-    int image[height][width];
-    int radius_arr[height][width];
+    vector<Pixel> dark_pixels;
+    vector<Pixel> light_pixels;
 
     //Input of image from terminal
     string line;
     for(int str=0; str<height; str++){
         cin>>line;
-        for(int pixel=0; pixel<width; pixel++){
-            //if(line[pixel] == '.') {image[str][pixel] = 0;}
-            if(line[pixel] == '*') {image[str][pixel] = 1;}
-            else {image[str][pixel] = 0;}
+        for(int pix=0; pix<width; pix++){
+            if(line[pix] == '*') {light_pixels.push_back(Pixel(pix, str, 1));}
+            else {dark_pixels.push_back(Pixel(pix, str, 0));}
         }
         line.erase(line.begin(), line.end());
     }
 
-    // cout<<"Input image : "<<endl;
-    // for(int i=0; i<height; i++){
-    //     for(int j=0; j<width; j++) cout<<image[i][j]<<" ";
-    //     cout<<endl;
+    //Input:
+    // for(int h=0; h<height; h++){
+    //     for(int w=0; w<width; w++){
+    //         pixels.push_back(Pixel(w, h, 0));
+    //     }
     // }
 
+    for(int i = 0; i< light_pixels.size(); i++){
+        light_pixels[i].r_max_possible = min(min(light_pixels[i].x, light_pixels[i].y), min(width-1-light_pixels[i].x,height-1-light_pixels[i].y));
+    }
+
+    sort(light_pixels.begin(), light_pixels.end(), greater<Pixel>());
+
     int R;
-    bool no_black_point_inside = true;
-
-    for(int y0=0; y0<height; y0++){
-        for(int x0=0; x0<width; x0++){
-            R = 0;
-            if(image[y0][x0] > 0){
-                no_black_point_inside = true;
-                while(no_black_point_inside){
-                    R++;
-                    for(int i=0; i<height; i++){
-                        if(!no_black_point_inside) break;
-                        for(int j=0; j<width; j++){
-                            if((image[i][j] == 0 && sqrt((y0-i)*(y0-i)+(x0-j)*(x0-j)) <= R) ||
-                                R > x0 || R > y0 || R > abs(width-1-x0) || R > abs(height-1-y0)){
-                                R--;
-                                no_black_point_inside = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            radius_arr[y0][x0] = R;
+    bool max_exceeded=false;
+    for(int i = 0; i< light_pixels.size(); i++){
+        for(int p = 0; p < i; p++){
+            if(light_pixels[p].r_moon>light_pixels[i].r_max_possible) max_exceeded = true;
+            if(light_pixels[p].r_moon>light_pixels[i])
         }
+        if(max_exceeded) break;
+        R = 999;
+        for(int j = 0; j< dark_pixels.size(); j++){
+            R = min(R, light_pixels[i].distance_to(dark_pixels[j]));
+        }
+        light_pixels[i].r_moon = min(R, light_pixels[i].r_max_possible);
     }
 
-    int max_R = 0;
-
-    for(int i=0; i<height; i++){
-        for(int j=0; j<width; j++){
-            if(max_R < radius_arr[i][j]) max_R = radius_arr[i][j];
-        }
+    int result=0;
+    for(int i = 0; i< light_pixels.size(); i++){
+        if(result < light_pixels[i].r_moon) result = light_pixels[i].r_moon;
     }
-    cout<<max_R<<endl;
+    cout<<result<<endl;
     return 0;
 }
