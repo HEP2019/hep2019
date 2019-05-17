@@ -20,7 +20,7 @@ class Pixel{
         x = x0;
         y = y0;
         color = col;
-        r_moon = 0;
+        r_moon=0;
     }
     
     bool operator > (const Pixel& pix) const{
@@ -57,7 +57,7 @@ int main(){
     //     }
     // }
 
-    int result=0;
+    int r_result=0, x_result, y_result;
 
     for(int i = 0; i< light_pixels.size(); i++){
         light_pixels[i].r_max_possible = min(min(light_pixels[i].x, light_pixels[i].y), min(width-1-light_pixels[i].x,height-1-light_pixels[i].y));
@@ -65,18 +65,30 @@ int main(){
 
     sort(light_pixels.begin(), light_pixels.end(), greater<Pixel>());
 
-    int R;
+    int R,i,j;
     bool max_exceeded=false;
-    for(int i = 0; i< light_pixels.size(); i++){
-        if(result>light_pixels[i].r_max_possible) max_exceeded = true;
-        if(max_exceeded) break;
+    for(i = 0; i< light_pixels.size(); i++){
+        if(r_result>light_pixels[i].r_max_possible) break;
+
         R = 999;
-        for(int j = 0; j< dark_pixels.size(); j++){
+        for(j = 0; j< dark_pixels.size(); j++){
             R = min(R, light_pixels[i].distance_to(dark_pixels[j]));
+
         }
-        result = max(result, min(R, light_pixels[i].r_max_possible));
+        light_pixels[i].r_moon = R;    
+        r_result = R;
     }
 
-    cout<<result<<endl;
+    for(i = 0; i< light_pixels.size(); i++){
+        if(r_result<light_pixels[i].r_moon){
+            r_result = light_pixels[i].r_moon;
+            x_result =light_pixels[i].x;
+            y_result =light_pixels[i].y;
+        }
+    }    
+
+    cout<<"Radius: "<<r_result<<endl;
+    cout<<"X: "<<x_result<<endl;
+    cout<<"Y: "<<y_result<<endl;
     return 0;
 }
