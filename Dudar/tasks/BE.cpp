@@ -57,6 +57,8 @@ int main(){
     //     }
     // }
 
+    int result=0;
+
     for(int i = 0; i< light_pixels.size(); i++){
         light_pixels[i].r_max_possible = min(min(light_pixels[i].x, light_pixels[i].y), min(width-1-light_pixels[i].x,height-1-light_pixels[i].y));
     }
@@ -66,21 +68,15 @@ int main(){
     int R;
     bool max_exceeded=false;
     for(int i = 0; i< light_pixels.size(); i++){
-        for(int p = 0; p < i; p++){
-            if(light_pixels[p].r_moon>light_pixels[i].r_max_possible) max_exceeded = true;
-        }
+        if(result>light_pixels[i].r_max_possible) max_exceeded = true;
         if(max_exceeded) break;
         R = 999;
         for(int j = 0; j< dark_pixels.size(); j++){
             R = min(R, light_pixels[i].distance_to(dark_pixels[j]));
         }
-        light_pixels[i].r_moon = min(R, light_pixels[i].r_max_possible);
+        result = max(result, min(R, light_pixels[i].r_max_possible));
     }
 
-    int result=0;
-    for(int i = 0; i< light_pixels.size(); i++){
-        if(result < light_pixels[i].r_moon) result = light_pixels[i].r_moon;
-    }
     cout<<result<<endl;
     return 0;
 }
