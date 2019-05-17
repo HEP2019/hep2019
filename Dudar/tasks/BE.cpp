@@ -57,7 +57,7 @@ int main(){
     //     }
     // }
 
-    int r_result=0, x_result, y_result;
+    int r_result=0, idx_result;
 
     for(int i = 0; i< light_pixels.size(); i++){
         light_pixels[i].r_max_possible = min(min(light_pixels[i].x, light_pixels[i].y), min(width-1-light_pixels[i].x,height-1-light_pixels[i].y));
@@ -82,13 +82,12 @@ int main(){
     for(i = 0; i< light_pixels.size(); i++){
         if(r_result<light_pixels[i].r_moon){
             r_result = light_pixels[i].r_moon;
-            x_result =light_pixels[i].x;
-            y_result =light_pixels[i].y;
+            idx_result = i;
         }
     }    
 
     cout<<"Radius: "<<r_result<<endl;
-    cout<<"X: "<<x_result<<endl;
-    cout<<"Y: "<<y_result<<endl;
+    cout<<"X: "<<light_pixels[idx_result].x<<endl;
+    cout<<"Y: "<<light_pixels[idx_result].y<<endl;
     return 0;
 }
