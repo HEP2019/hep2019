@@ -72,7 +72,7 @@ int main(){
         if(max_exceeded) break;
         R = 999;
         for(int j = 0; j< dark_pixels.size(); j++){
-            if() R = min(R, light_pixels[i].distance_to(dark_pixels[j]));
+            R = min(R, light_pixels[i].distance_to(dark_pixels[j]));
         }
         light_pixels[i].r_moon = min(R, light_pixels[i].r_max_possible);
     }
