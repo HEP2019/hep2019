@@ -8,7 +8,7 @@ main()
 	int N;
 	list<int> zn; 
 	cin>>N;
-	for(int i=9; i>1; i--){
+	for(int i=9; i>0; i--){
 		while(N%i==0){
 			N/=i;
 			zn.push_front(i);
