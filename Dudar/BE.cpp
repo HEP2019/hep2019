@@ -85,8 +85,8 @@ int main(){
         }
     }
 
-    cout<<"Radius: "<<r_result<<endl;
-    cout<<"X: "<<light_pixels[idx_result].x<<endl;
-    cout<<"Y: "<<light_pixels[idx_result].y<<endl;
+    cout<<r_result<<endl;
+    // cout<<"X: "<<light_pixels[idx_result].x<<endl;
+    // cout<<"Y: "<<light_pixels[idx_result].y<<endl;
     return 0;
 }
