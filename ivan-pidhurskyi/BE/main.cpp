@@ -99,7 +99,7 @@ l_black:
       for (size_t x = 0; x < m_width; ++x) {
         int v = m_cells[x][y];
         
-        if (ceil(distance(x, y, x0, y0)) <= r)
+        if (distance(x, y, x0, y0) <= r)
           os << "\x1b[4m";
         if (x0 == x && y0 == y)
           os << "\x1b[38;5;4;1m";
@@ -144,18 +144,18 @@ l_black:
   int find_radius(int x0, int y0) const
   {
     int rank = m_step - 1;
-    int r = rank;
-    int tmp;
+    double r = rank;
+    double tmp;
     for (int y = y0 - rank; y <= y0 + rank; ++y) {
       for (int x = x0 - rank; x <= x0 + rank; ++x) {
         if (at(x, y) < 0) {
-          tmp = ceil(distance(x, y, x0, y0));
-          if (tmp <= r)
-            r = std::min(r, tmp - 1);
+          tmp = distance(x, y, x0, y0);
+          r = std::min(r, tmp);
         }
       }
     }
-    return r;
+    return ceil(r-1);
+    //return floor(r);
   }
 
   friend std::istream& operator >> (std::istream& is, field& f);
@@ -232,6 +232,9 @@ int main(int argc, char** argv)
   int r = f.find_radius(x0, y0);
 
   if (verbose) {
+    f.circle(std::cout, 11, 7, 4);
+    for (int i = 0; i < f.width(); std::cout << "==", ++i);
+    std::cout << std::endl;
     f.circle(std::cout, x0, y0, r);
     for (int i = 0; i < f.width(); std::cout << "==", ++i);
     std::cout << std::endl;
