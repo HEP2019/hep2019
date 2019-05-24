@@ -26,7 +26,10 @@ int main(){
     int result=0;
     for(int i=0; i<M; i++){
         cin>>broken_serial;
-        if(serial_map[broken_serial]>0) result++;
+        if(serial_map[broken_serial]>0){
+            result++;
+            serial_map[broken_serial]=0;
+        }
     }
     cout<<result<<endl;
     return 0;
