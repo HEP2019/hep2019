@@ -27,7 +27,7 @@ int main(){
     for(int i=0; i<M; i++){
         cin>>broken_serial;
         if(serial_map[broken_serial]>0){
-            result++;
+            result+=serial_map[broken_serial];
             serial_map[broken_serial]=0;
         }
     }
