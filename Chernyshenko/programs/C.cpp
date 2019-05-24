@@ -18,9 +18,10 @@ int main(){
  	return 0;
  }
  int res=0;
-	for(int n=1; n<x; n++){
-		if(y/x*n==int(y/x*n)){
-			res=y/n-1;
+ double func=min(x,y)/max(x,y);
+	for(int n=1; n<max(x,y); n++){
+		if(func*n==int(func*n)){
+			res=max(x,y)/n-1;
 			break;
 		 }
 		 
