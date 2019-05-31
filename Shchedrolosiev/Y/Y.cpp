@@ -10,8 +10,10 @@ int add(int a, int b)
 	int res = a;
 	int res2 = b;
 	while(true){
-		res = (res + res2) % base;
-		res2 = (res + res2) / base;
+		int res_ = res;
+		int res2_ = res2;
+		res = (res_ + res2_) % base;
+		res2 = (res_ + res2_) / base;
 		if(res2==0) return res;
 	}	
 }	
@@ -41,7 +43,7 @@ bool check(std::vector<int> init)
 		res = add(init[i],res);			
 	}
 	//std::cout<<"res: "<<res<<"\n";
-	if(res==base || res==0) return true;
+	if(res==base-1 || res==0) return true;
 	else return false;
 }
 
@@ -79,12 +81,14 @@ int main()
 	start_base = max(start_base,start_base_);
 
 	int res;
-	for(int i = start_base; i<=36; ++i){
+	for(int i = start_base+1; i<=36; ++i){
 
 		base = i;
 		
 		//std::cout<<"base: "<<base<<" ";
 		if(check(norm_form)==true){
+			std::cout<<base;
+			return 0;
 			break;
 		}
 	}
@@ -92,12 +96,9 @@ int main()
 
 	//std::cout<<trans(norm_form)<<"\n";
        
-	//for(int i=0 ; i<norm_form.size() ; i++)
-        //{
-	//	std::cout << norm_form[i] << "\n";
-        //}
+	//for(int i=0 ; i<norm_form.size() ; i++) std::cout << norm_form[i] << "\n";
 
-	std::cout<<base;
-
+//	std::cout<<base;
+	std::cout<<"No solution.";
 	return 0;
 }
