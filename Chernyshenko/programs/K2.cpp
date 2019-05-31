@@ -21,7 +21,7 @@ int main(){
 		res.push_front(Ai);
 		Ai=AI;
 	}
-	cout << res.size() << ' ' << N << ' ' << K << ' ' << std::endl;
+	//cout << res.size() << ' ' << N << ' ' << K << ' ' << std::endl;
 	res.sort();
 	copy(mynext(res.begin(),N-K), res.end(), ostream_iterator<int>(cout," ")); 
 	}
