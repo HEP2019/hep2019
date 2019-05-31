@@ -14,8 +14,6 @@ int main(){
 		res.push_front(Ai);
 		Ai=AI;
 	}
-	cout<<"q";
-	//res.sort();
-
-	//copy(std::next(res.begin(),N-K+1), res.end(), ostream_iterator<int>(cout," ")); 
+	res.sort();
+	copy(std::next(res.begin(),N-K+1), res.end(), ostream_iterator<int>(cout," ")); 
 	}
