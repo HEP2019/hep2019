@@ -1,45 +1,36 @@
 #include <iostream>
+
 using namespace std;
 
-
-main()
+int main()
 {
-  long long int n, q=0, q1, i, p;
-  cin>>n;
-  if ((n<0) or (n>1000000000))
-  {
-    return 1;
-  }
-  if (n<2)
-  {
-    q1=n;
-  }
-  else
-  {
-    q1=-1;
-    if ((n==1 and q1>=q) or (q1==-1))
-    {
-      q1=q;
-    }
 
-    for (i=2;i<10;i++)
+   long int N, Q = 0 ,p = 1;
+   cin >> N;
+   if(N==0)
     {
-      if (n%i==0)
-      {
-  //      cout<<'n'<<n;
-  //      cout<<'i'<<i;
-        p=q;
-        q=q*10+i;
-  //      cout<<'q'<<q;
-        n=n/i;
-  //        cout<<'n'<<n;
-        i--;
-      }
+        cout<<"10"<<endl;
+        return 0;
     }
-//    cout<<'n'<<n<<endl;
-    if (n==1)
+    if(N<10)
     {
-      cout<<q<<endl;
+        cout<<N<<endl;
+        return 0;
     }
-  }
+    for(int div = 9; div > 1; --div)
+    {
+        while( (N%div) == 0)
+        {
+            Q += p * div;
+            p = p * 10;
+            N /= div;
+        }
+    }
+  if(N>1)
+    {
+        cout<<"-1"<<endl;
+        return 0;
+    }
+   cout << Q << endl;
+    return 0;
 }
