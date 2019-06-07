@@ -9,12 +9,12 @@ T mynext(T iter, size_t n)
 	std::advance(iter, n);
 	return iter;
 }
-
+list<int> res;
 int main(){
 	int N,K,B,C,M,A1,AI,Ai;
 	cin>>N>>K>>B>>C>>M>>A1;
 	//int l=K, d=0;
-	list<int> res;
+	//list<int> res;
 
 	
 	Ai=A1;
