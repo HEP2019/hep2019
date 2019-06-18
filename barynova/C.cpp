@@ -29,7 +29,7 @@ int main()
     if(b<0)  b*=-1;
     a == 0 ? k=b-1 : k=0;
     b == 0 ? k=a-1 : k=k;
-    if((x1=y1) && (x2==y2) && (x1 !=x2))   x2>x1 ? k = x2-x1-1 : k=x1-x2-1;
+    if((x1==y1) && (x2==y2) && (x1 !=x2))   x2>x1 ? k = x2-x1-1 : k=x1-x2-1;
     if (k ==0) k = numrob(a*1.0, b*1.0, k);
     if (k <0) k*=(-1);
     k == -1 ? cout<<0<<endl : cout<<k<<endl;
