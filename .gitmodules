@@ -1,0 +1,3 @@
+[submodule "deep_learning/Pidhurskyi/mynet/codeine"]
+	path = deep_learning/Pidhurskyi/mynet/codeine
+	url = https://github.com/pidhii/codeine.git
